@@ -3,7 +3,7 @@
 
 Register the root uri
 ```javascript
-Dside.setRoot('http://localhost/dside/')
+Dside.setRoot('http://localhost/dside/');
 ```
 
 Register routes and dispatch events if the current route matches.
@@ -15,18 +15,18 @@ Dside.register([
 	{uri:'index.html', event:'Home@indexPage'}
 ])
 
-Dside.run()
+Dside.run();
 ```
 
 Register before and after events on certain routes and global before and event events.
 ```javascript
 Dside.register([
-		{uri: '', event:'Home@getData', before: ['Home@before'], after: ['Home@after']},
-	])
-Dside.before('Home@beforeAction')
-Dside.after('Home@afterAction')
+	{uri: '', event:'Home@getData', before: ['Home@before'], after: ['Home@after']},
+]);
+Dside.before('Home@beforeAction');
+Dside.after('Home@afterAction');
 
-Dside.run()
+Dside.run();
 ```
 
 Register an anonymous function as a dispatch event.
@@ -35,21 +35,22 @@ Dside.register([
 	{uri:'index.html', event: function(){
 		console.log('anonymous');
 	}},
-])
+]);
 
-Dside.run()
+Dside.run();
 ```
 
 Dispatch a global function
 ```javascript
-function someFunction()
-{
-		console.log('someFunction')
+function someFunction(){
+		console.log('someFunction');
 }
+
 Dside.register([
 	{uri:'', event:'someFunction'},
-])
-Dside.run()
+]);
+
+Dside.run();
 ```
 
 Dispatch an event using an already constructed object
@@ -58,7 +59,9 @@ home = new Home();
 
 Dside.register([
 	{uri:'index.html', event:'indexPage', uses: 'home'},
-])
+]);
+
+Dside.run();
 ```
 
 ### To Do
