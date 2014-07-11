@@ -1,0 +1,14 @@
+<script src="build/home.js"></script>
+<script src="build/dside.js"></script>
+<script type="text/javascript">
+
+	Dside.before('Home@beforeAction')
+	Dside.after('Home@afterAction')
+
+	Dside.register([
+		{uri: '', event:'Home@getData', before: ['Home@before']},
+		{uri:'index.html', event:'Home@indexPage'}
+	])
+
+	Dside.run()
+</script>
