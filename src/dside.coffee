@@ -52,7 +52,7 @@ class Dside
 			@dispatch(event)
 		return
 
-	dispatch: (dispatchEvent, use = null) ->
+	dispatch: (dispatchEvent, uses = null) ->
 		if typeof dispatchEvent is 'function'
 			dispatchEvent()
 		else
@@ -63,8 +63,8 @@ class Dside
 				# run function, apply the context of this in the created obj as itself
 				obj[dis[1]].apply(obj, [])
 			else
-				if use isnt null
-					window[use][dis]()
+				if uses isnt null
+					window[uses][dis]()
 				else
 					window[dis]()
 		return
@@ -84,8 +84,8 @@ class Dside
 			@dispatchMultipleEvents(@beforeEvents)
 			@dispatchMultipleEvents(match.before) if match.hasOwnProperty('before')
 			# dispatch main event
-			if match.hasOwnProperty('use')
-				@dispatch(match.event, match.use)
+			if match.hasOwnProperty('uses')
+				@dispatch(match.event, match.uses)
 			else
 				@dispatch(match.event)
 			# dispatch after events

@@ -44,6 +44,15 @@ Dside.register([
 Dside.run()
 ```
 
+Dispatch an event using an already constructed object
+```javascript
+home = new Home();
+
+Dside.register([
+	{uri:'index.html', event:'indexPage', uses: 'home'},
+])
+```
+
 ### To Do
 dynamic routing  
 

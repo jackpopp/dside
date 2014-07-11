@@ -73,10 +73,10 @@ Dside = (function() {
     }
   };
 
-  Dside.prototype.dispatch = function(dispatchEvent, use) {
+  Dside.prototype.dispatch = function(dispatchEvent, uses) {
     var dis, obj;
-    if (use == null) {
-      use = null;
+    if (uses == null) {
+      uses = null;
     }
     if (typeof dispatchEvent === 'function') {
       dispatchEvent();
@@ -86,8 +86,8 @@ Dside = (function() {
         obj = new window[dis[0]]();
         obj[dis[1]].apply(obj, []);
       } else {
-        if (use !== null) {
-          window[use][dis]();
+        if (uses !== null) {
+          window[uses][dis]();
         } else {
           window[dis]();
         }
@@ -114,8 +114,8 @@ Dside = (function() {
       if (match.hasOwnProperty('before')) {
         this.dispatchMultipleEvents(match.before);
       }
-      if (match.hasOwnProperty('use')) {
-        this.dispatch(match.event, match.use);
+      if (match.hasOwnProperty('uses')) {
+        this.dispatch(match.event, match.uses);
       } else {
         this.dispatch(match.event);
       }
