@@ -12,3 +12,13 @@ Register before and after events on certain routes
 
 	Dside.run()
 ```
+Register an anonymous function as a dispatch event
+```javascript
+	Dside.register([
+		{uri:'index.html', event: function(){
+			console.log('anonymous');
+		}},
+	])
+
+	Dside.run()
+```
