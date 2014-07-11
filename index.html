@@ -2,15 +2,21 @@
 <script src="build/dside.js"></script>
 <script type="text/javascript">
 
+	function someFunction()
+	{
+		console.log('someFunction')
+	}
+
 	Dside.before('Home@beforeAction')
 	Dside.after('Home@afterAction')
 
 	Dside.register([
 		{uri: '', event:'Home@getData', before: ['Home@before'], after: ['Home@after']},
-		{uri:'index.html', event:'Home@indexPage'},
-		{uri:'index.html', event: function(){
+		//{uri:'index.html', event:'Home@indexPage'},
+		/*{uri:'index.html', event: function(){
 			console.log('yo');
-		}},
+		}},*/
+		{uri:'index.html', event:'someFunction'},
 	])
 
 	Dside.run()

@@ -79,8 +79,12 @@ Dside = (function() {
       dispatchEvent();
     } else {
       dis = dispatchEvent.split(delimiter);
-      obj = new window[dis[0]]();
-      obj[dis[1]].apply(obj, []);
+      if (dis.length > 1) {
+        obj = new window[dis[0]]();
+        obj[dis[1]].apply(obj, []);
+      } else {
+        window[dis]();
+      }
     }
   };
 

@@ -12,6 +12,7 @@ Register before and after events on certain routes.
 
 	Dside.run()
 ```
+
 Register before and after events on certain routes and global before and event events.
 ```javascript
 	Dside.before('Home@beforeAction')
@@ -19,6 +20,7 @@ Register before and after events on certain routes and global before and event e
 
 	Dside.run()
 ```
+
 Register an anonymous function as a dispatch event.
 ```javascript
 	Dside.register([
@@ -29,3 +31,23 @@ Register an anonymous function as a dispatch event.
 
 	Dside.run()
 ```
+
+Dispatch a global function
+```javascript
+function someFunction()
+	{
+		console.log('someFunction')
+	}
+Dside.register([
+		{uri:'', event:'someFunction'},
+	])
+```
+
+### To Do
+dynamic routing
+pass dynamic values to function as params
+dispatch multiple events for single registered route
+global function from route
+load source when route hit
+use previously constructed object
+pre construct objects
