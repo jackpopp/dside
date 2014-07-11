@@ -75,9 +75,13 @@ Dside = (function() {
 
   Dside.prototype.dispatch = function(dispatchEvent) {
     var dis, obj;
-    dis = dispatchEvent.split(delimiter);
-    obj = new window[dis[0]]();
-    obj[dis[1]].apply(obj, []);
+    if (typeof dispatchEvent === 'function') {
+      dispatchEvent();
+    } else {
+      dis = dispatchEvent.split(delimiter);
+      obj = new window[dis[0]]();
+      obj[dis[1]].apply(obj, []);
+    }
   };
 
 

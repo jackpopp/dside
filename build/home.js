@@ -5,7 +5,10 @@ Home = function() {
     console.log('im always called before');
   };
   this.before = function() {
-    console.log('sometimes caled before');
+    console.log('sometimes called before');
+  };
+  this.after = function() {
+    console.log('sometimes called after');
   };
   this.afterAction = function() {
     console.log('im always called after');

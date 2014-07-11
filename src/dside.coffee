@@ -53,11 +53,14 @@ class Dside
 		return
 
 	dispatch: (dispatchEvent) ->
-		dis = dispatchEvent.split(delimiter)
-		# create object
-		obj = new window[dis[0]]()
-		# run function, apply the context of this in the created obj as itself
-		obj[dis[1]].apply(obj, [])
+		if typeof dispatchEvent is 'function'
+			dispatchEvent()
+		else
+			dis = dispatchEvent.split(delimiter)
+			# create object
+			obj = new window[dis[0]]()
+			# run function, apply the context of this in the created obj as itself
+			obj[dis[1]].apply(obj, [])
 		return
 
 	###

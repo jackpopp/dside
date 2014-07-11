@@ -6,8 +6,11 @@
 	Dside.after('Home@afterAction')
 
 	Dside.register([
-		{uri: '', event:'Home@getData', before: ['Home@before']},
-		{uri:'index.html', event:'Home@indexPage'}
+		{uri: '', event:'Home@getData', before: ['Home@before'], after: ['Home@after']},
+		{uri:'index.html', event:'Home@indexPage'},
+		{uri:'index.html', event: function(){
+			console.log('yo');
+		}},
 	])
 
 	Dside.run()

@@ -4,7 +4,11 @@ Home = ->
 		return
 
 	this.before = ->
-		console.log 'sometimes caled before'
+		console.log 'sometimes called before'
+		return
+
+	this.after = ->
+		console.log 'sometimes called after'
 		return
 
 	this.afterAction = ->
