@@ -1,6 +1,11 @@
 ## Dside
 ### Javascript dispatcher
 
+Register the root uri
+```javascript
+Dside.setRoot('http://localhost/dside/')
+```
+
 Register routes and dispatch events if the current route matches.
 Construct an object and then dispatch an event from the object.
 Register before and after events on certain routes.
@@ -15,6 +20,9 @@ Dside.run()
 
 Register before and after events on certain routes and global before and event events.
 ```javascript
+Dside.register([
+		{uri: '', event:'Home@getData', before: ['Home@before'], after: ['Home@after']},
+	])
 Dside.before('Home@beforeAction')
 Dside.after('Home@afterAction')
 
