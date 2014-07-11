@@ -7,6 +7,9 @@
 		console.log('someFunction')
 	}
 
+	home = new Home();
+
+	Dside.setRoot('http://localhost/dside/')
 	Dside.before('Home@beforeAction')
 	Dside.after('Home@afterAction')
 
@@ -16,7 +19,8 @@
 		/*{uri:'index.html', event: function(){
 			console.log('yo');
 		}},*/
-		{uri:'index.html', event:'someFunction'},
+		//{uri:'index.html', event:'someFunction'},
+		{uri:'index.html', event:'indexPage', use: 'home'},
 	])
 
 	Dside.run()

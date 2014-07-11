@@ -4,7 +4,7 @@ class Dside
 	variables = []
 
 	constructor: ->
-		@rootURI = 'http://localhost/dside/'
+		@rootURI = null
 		@currentURI = document.URL
 		@routes = []
 		@beforeEvents = []
@@ -52,7 +52,7 @@ class Dside
 			@dispatch(event)
 		return
 
-	dispatch: (dispatchEvent) ->
+	dispatch: (dispatchEvent, use = null) ->
 		if typeof dispatchEvent is 'function'
 			dispatchEvent()
 		else
@@ -63,7 +63,10 @@ class Dside
 				# run function, apply the context of this in the created obj as itself
 				obj[dis[1]].apply(obj, [])
 			else
-				window[dis]()
+				if use isnt null
+					window[use][dis]()
+				else
+					window[dis]()
 		return
 
 	###
@@ -74,13 +77,17 @@ class Dside
 	###
 
 	run: ->
+		throw new Error('No root URI set') if @getRoot() is null
 		@setRouteToMatch(@currentURI.replace(@getRoot(), ''))
 		if match = @matchRoute(@getRouteToMatch())
 			# dispatch global before events
 			@dispatchMultipleEvents(@beforeEvents)
 			@dispatchMultipleEvents(match.before) if match.hasOwnProperty('before')
 			# dispatch main event
-			@dispatch(match.event)
+			if match.hasOwnProperty('use')
+				@dispatch(match.event, match.use)
+			else
+				@dispatch(match.event)
 			# dispatch after events
 			@dispatchMultipleEvents(@afterEvents)
 			@dispatchMultipleEvents(match.after) if match.hasOwnProperty('after')

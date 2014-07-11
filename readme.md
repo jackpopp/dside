@@ -39,8 +39,8 @@ function someFunction()
 		console.log('someFunction')
 }
 Dside.register([
-		{uri:'', event:'someFunction'},
-	])
+	{uri:'', event:'someFunction'},
+])
 Dside.run()
 ```
 

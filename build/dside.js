@@ -10,7 +10,7 @@ Dside = (function() {
   variables = [];
 
   function Dside() {
-    this.rootURI = 'http://localhost/dside/';
+    this.rootURI = null;
     this.currentURI = document.URL;
     this.routes = [];
     this.beforeEvents = [];
@@ -73,8 +73,11 @@ Dside = (function() {
     }
   };
 
-  Dside.prototype.dispatch = function(dispatchEvent) {
+  Dside.prototype.dispatch = function(dispatchEvent, use) {
     var dis, obj;
+    if (use == null) {
+      use = null;
+    }
     if (typeof dispatchEvent === 'function') {
       dispatchEvent();
     } else {
@@ -83,7 +86,11 @@ Dside = (function() {
         obj = new window[dis[0]]();
         obj[dis[1]].apply(obj, []);
       } else {
-        window[dis]();
+        if (use !== null) {
+          window[use][dis]();
+        } else {
+          window[dis]();
+        }
       }
     }
   };
@@ -98,13 +105,20 @@ Dside = (function() {
 
   Dside.prototype.run = function() {
     var match;
+    if (this.getRoot() === null) {
+      throw new Error('No root URI set');
+    }
     this.setRouteToMatch(this.currentURI.replace(this.getRoot(), ''));
     if (match = this.matchRoute(this.getRouteToMatch())) {
       this.dispatchMultipleEvents(this.beforeEvents);
       if (match.hasOwnProperty('before')) {
         this.dispatchMultipleEvents(match.before);
       }
-      this.dispatch(match.event);
+      if (match.hasOwnProperty('use')) {
+        this.dispatch(match.event, match.use);
+      } else {
+        this.dispatch(match.event);
+      }
       this.dispatchMultipleEvents(this.afterEvents);
       if (match.hasOwnProperty('after')) {
         this.dispatchMultipleEvents(match.after);
