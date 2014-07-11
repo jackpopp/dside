@@ -44,10 +44,16 @@ Dside.register([
 ```
 
 ### To Do
-dynamic routing
-pass dynamic values to function as params
-dispatch multiple events for single registered route
-global function from route
-load source when route hit
-use previously constructed object
+dynamic routing  
+
+pass dynamic values to function as params  
+
+dispatch multiple events for single registered route  
+
+global function from route  
+
+load source when route hit  
+
+use previously constructed object  
+
 pre construct objects
