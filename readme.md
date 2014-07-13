@@ -8,7 +8,6 @@ Dside.setRoot('http://localhost/dside/');
 
 Register routes and dispatch events if the current route matches.
 Construct an object and then dispatch an event from the object.
-Register before and after events on certain routes.
 ```javascript
 Dside.register([
 	{uri: '', event:'Home@getData'},
@@ -71,10 +70,6 @@ pass dynamic values to function as params
 
 dispatch multiple events for single registered route  
 
-global function from route  
-
 load source when route hit  
 
 use previously constructed object  
-
-pre construct objects

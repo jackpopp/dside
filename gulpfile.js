@@ -23,7 +23,8 @@ var gulp         = require('gulp'),
     concat       = require('gulp-concat'),
     browserify   = require('gulp-browserify'),
     merge        = require('merge-stream'),
-    notify       = require('gulp-notify');
+    notify       = require('gulp-notify'),
+    qunit        = require('gulp-qunit');
 
 // Javascript/Coffeescript
 gulp.task('js', function(cb){
@@ -74,4 +75,9 @@ gulp.task('build', ['jsProd'], function(){
 	// clean up here
 	return gulp.src([DEV_DEST_DIR], {read: false})
     	//.pipe(clean());
+});
+
+gulp.task('test', function() {
+    return gulp.src('./test/test.html')
+        .pipe(qunit());
 });
