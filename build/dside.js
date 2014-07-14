@@ -1,6 +1,6 @@
-var Dside;
+var Dside, DsideDipatcher;
 
-Dside = (function() {
+DsideDipatcher = (function() {
   var delimiter, routeToMatch, variables;
 
   routeToMatch = null;
@@ -9,7 +9,7 @@ Dside = (function() {
 
   variables = [];
 
-  function Dside() {
+  function DsideDipatcher() {
     this.rootURI = null;
     this.currentURI = document.URL;
     this.routes = [];
@@ -17,23 +17,23 @@ Dside = (function() {
     this.afterEvents = [];
   }
 
-  Dside.prototype.setRoot = function(uri) {
+  DsideDipatcher.prototype.setRoot = function(uri) {
     this.rootURI = uri;
   };
 
-  Dside.prototype.getRoot = function() {
+  DsideDipatcher.prototype.getRoot = function() {
     return this.rootURI;
   };
 
-  Dside.prototype.setRouteToMatch = function(route) {
+  DsideDipatcher.prototype.setRouteToMatch = function(route) {
     routeToMatch = route;
   };
 
-  Dside.prototype.getRouteToMatch = function() {
+  DsideDipatcher.prototype.getRouteToMatch = function() {
     return routeToMatch;
   };
 
-  Dside.prototype.register = function(route) {
+  DsideDipatcher.prototype.register = function(route) {
     var obj, _i, _len;
     if (route.length > 0 && route[0] instanceof Object) {
       for (_i = 0, _len = route.length; _i < _len; _i++) {
@@ -45,15 +45,15 @@ Dside = (function() {
     }
   };
 
-  Dside.prototype.before = function(event) {
+  DsideDipatcher.prototype.before = function(event) {
     this.beforeEvents.push(event);
   };
 
-  Dside.prototype.after = function(event) {
+  DsideDipatcher.prototype.after = function(event) {
     this.afterEvents.push(event);
   };
 
-  Dside.prototype.matchRoute = function(currentRoute) {
+  DsideDipatcher.prototype.matchRoute = function(currentRoute) {
     var route, _i, _len, _ref;
     _ref = this.routes;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -65,7 +65,7 @@ Dside = (function() {
     return false;
   };
 
-  Dside.prototype.dispatchMultipleEvents = function(events) {
+  DsideDipatcher.prototype.dispatchMultipleEvents = function(events) {
     var event, _i, _len;
     for (_i = 0, _len = events.length; _i < _len; _i++) {
       event = events[_i];
@@ -73,7 +73,7 @@ Dside = (function() {
     }
   };
 
-  Dside.prototype.dispatch = function(dispatchEvent, uses) {
+  DsideDipatcher.prototype.dispatch = function(dispatchEvent, uses) {
     var dis, obj;
     if (uses == null) {
       uses = null;
@@ -103,7 +103,7 @@ Dside = (function() {
   	 *
    */
 
-  Dside.prototype.run = function() {
+  DsideDipatcher.prototype.run = function() {
     var match;
     if (this.getRoot() === null) {
       throw new Error('No root URI set');
@@ -126,8 +126,20 @@ Dside = (function() {
     }
   };
 
-  return Dside;
+
+  /*
+  	 * Resets Dside to a newly constructed object
+  	 * Removes regiestered routes and filters 
+  	 *
+   */
+
+  DsideDipatcher.prototype.reset = function() {
+    window.Dside = null;
+    window.Dside = new DsideDipatcher();
+  };
+
+  return DsideDipatcher;
 
 })();
 
-Dside = new Dside();
+Dside = new DsideDipatcher();

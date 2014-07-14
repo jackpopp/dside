@@ -1,4 +1,4 @@
-class Dside
+class DsideDipatcher
 	routeToMatch = null
 	delimiter = '@'
 	variables = []
@@ -93,4 +93,15 @@ class Dside
 			@dispatchMultipleEvents(match.after) if match.hasOwnProperty('after')
 		return
 
-Dside = new Dside()
+	###
+	# Resets Dside to a newly constructed object
+	# Removes regiestered routes and filters 
+	#
+	###
+
+	reset: ->
+		window.Dside = null
+		window.Dside = new DsideDipatcher()
+		return
+
+Dside = new DsideDipatcher()

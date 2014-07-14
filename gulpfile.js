@@ -30,7 +30,7 @@ var gulp         = require('gulp'),
 gulp.task('js', function(cb){
 	// compile
 	compile = gulp.src(ASSET_DIR+'/**/*.coffee')
-		.pipe(coffee({bare: true}))
+		.pipe(coffee({bare: true})).on('error', function(){console.log('error compiling')})
 		.pipe(gulp.dest(DEV_DEST_DIR));
 
 	copy = gulp.src([ASSET_DIR+'js/**/*.*', '!'+ASSET_DIR+'js/**/*.coffee'])
@@ -60,7 +60,7 @@ gulp.task('clean', function(cb) {
 
 gulp.task('watch', ['clean'], function() {
   // place code for your default task here
-  watch({ glob: ASSET_DIR+'*.*'}, ['js']).pipe(notify({message: 'File changes compiled'}));
+  watch({ glob: ASSET_DIR+'*.*'}, ['js', 'test']).pipe(notify({message: 'File changes compiled'}));
 });
 
 
