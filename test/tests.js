@@ -4,14 +4,16 @@ QUnit.testStart(function(){
 
 // Test setting root
 
-QUnit.test("setRoot", function( assert ){
+QUnit.test("setRoot", function(assert){
 
 	Dside.setRoot('http://localhost/dside/');
 
 	assert.equal(Dside.getRoot(), 'http://localhost/dside/', 'Root URI set correctly');
 });
 
-QUnit.test("registerRoute", function( assert ){
+// Test registering a route
+
+QUnit.test("registerRoute", function(assert){
 
 	Dside.register([
 		{uri:'', event:'indexPage', uses: 'home'},
@@ -23,9 +25,19 @@ QUnit.test("registerRoute", function( assert ){
 	assert.equal(Dside.routes[0].uses, 'home', 'Expect first route uses to be home');
 });
 
+// Test matching a route
+
+QUnit.test('matchRoute', function(assert){
+	route = {uri:'test', event:'indexPage', uses: 'home'}
+
+	Dside.register(route);
+	assert.equal(Dside.matchRoute('fail'), false, 'Should not match and return false')
+	assert.equal(Dside.matchRoute('test'), route, 'Should match and return route object')
+})
+
 // Test before and after global filters
 
-QUnit.test("filters.global", function( assert )
+QUnit.test("filters.global", function(assert)
 {
 	Dside.before('Home@beforeAction');
 	Dside.after('Home@afterAction');
@@ -38,7 +50,7 @@ QUnit.test("filters.global", function( assert )
 
 // Test reset function
 
-QUnit.test('reset', function( assert )
+QUnit.test('reset', function(assert)
 {
 	Dside.reset();
 	assert.equal(Dside.routes.length , 0);
@@ -47,7 +59,8 @@ QUnit.test('reset', function( assert )
 	assert.equal(Dside.afterEvents.length , 0);
 });
 
-// match a route and check event was fired
+// Test matching a route and checking an global event was fire
+
 QUnit.test('eventFired', function(assert)
 {
 	pie = 'orange';
@@ -67,7 +80,8 @@ QUnit.test('eventFired', function(assert)
 });
 
 
-// check object was constructed
+// Test matching a route and checking an object was constructed and an function belonging to the object was fired 
+
 QUnit.test('eventFromObjectFired', function(assert)
 {
 	page = null;
