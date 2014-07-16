@@ -25,7 +25,7 @@ Dside.run();
 
 Register dynamic routes, this will match any routes that are the same pattern
 ```javascript
-route = {uri:'test/{id}', event:'indexPage', uses: 'home'};
+route = {uri:'user/{id}', event:'getUserData', uses: 'user'};
 Dside.register(route);
 
 // will match
