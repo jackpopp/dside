@@ -8,13 +8,29 @@ Dside.setRoot('http://localhost/dside/');
 
 Register routes and dispatch events if the current route matches.
 Construct an object and then dispatch an event from the object.
+You can register an array of routes or a single route.
 ```javascript
 Dside.register([
 	{uri: '', event:'Home@getData'},
 	{uri:'index.html', event:'Home@indexPage'}
-])
+]);
+
+// or
+
+Dside.register({uri: '', event:'Home@getData'});
 
 Dside.run();
+
+```
+
+Register dynamic routes, this will match any routes that are the same pattern
+```javascript
+route = {uri:'test/{id}', event:'indexPage', uses: 'home'};
+Dside.register(route);
+
+// will match
+// user/6
+// user/76
 ```
 
 Register before and after events on certain routes and global before and event events.
