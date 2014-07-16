@@ -89,7 +89,7 @@ class DsideDipatcher
 			@dispatch(event)
 		return
 
-	dispatch: (dispatchEvent, uses = null) ->
+	dispatch: (dispatchEvent, paramaters = [], uses = null) ->
 		if typeof dispatchEvent is 'function'
 			dispatchEvent()
 		else
@@ -98,12 +98,12 @@ class DsideDipatcher
 				# create object
 				obj = new window[dis[0]]()
 				# run function, apply the context of this in the created obj as itself
-				obj[dis[1]].apply(obj, [])
+				obj[dis[1]].apply(obj, paramaters)
 			else
 				if uses isnt null
-					window[uses][dis]()
+					window[uses][dis].apply(null, paramaters)
 				else
-					window[dis]()
+					window[dis].apply(null, paramaters)
 		return
 
 	###
@@ -121,10 +121,7 @@ class DsideDipatcher
 			@dispatchMultipleEvents(@beforeEvents)
 			@dispatchMultipleEvents(match.before) if match.hasOwnProperty('before')
 			# dispatch main event
-			if match.hasOwnProperty('uses')
-				@dispatch(match.event, match.uses)
-			else
-				@dispatch(match.event)
+			@dispatch(match.event, match.paramaters ,match.uses)
 			# dispatch after events
 			@dispatchMultipleEvents(@afterEvents)
 			@dispatchMultipleEvents(match.after) if match.hasOwnProperty('after')

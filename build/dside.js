@@ -117,8 +117,11 @@ DsideDipatcher = (function() {
     }
   };
 
-  DsideDipatcher.prototype.dispatch = function(dispatchEvent, uses) {
+  DsideDipatcher.prototype.dispatch = function(dispatchEvent, paramaters, uses) {
     var dis, obj;
+    if (paramaters == null) {
+      paramaters = [];
+    }
     if (uses == null) {
       uses = null;
     }
@@ -128,12 +131,12 @@ DsideDipatcher = (function() {
       dis = dispatchEvent.split(delimiter);
       if (dis.length > 1) {
         obj = new window[dis[0]]();
-        obj[dis[1]].apply(obj, []);
+        obj[dis[1]].apply(obj, paramaters);
       } else {
         if (uses !== null) {
-          window[uses][dis]();
+          window[uses][dis].apply(null, paramaters);
         } else {
-          window[dis]();
+          window[dis].apply(null, paramaters);
         }
       }
     }
@@ -158,11 +161,7 @@ DsideDipatcher = (function() {
       if (match.hasOwnProperty('before')) {
         this.dispatchMultipleEvents(match.before);
       }
-      if (match.hasOwnProperty('uses')) {
-        this.dispatch(match.event, match.uses);
-      } else {
-        this.dispatch(match.event);
-      }
+      this.dispatch(match.event, match.paramaters, match.uses);
       this.dispatchMultipleEvents(this.afterEvents);
       if (match.hasOwnProperty('after')) {
         this.dispatchMultipleEvents(match.after);

@@ -101,6 +101,42 @@ QUnit.test('events.firedFromObject', function(assert)
 	assert.equal(page, 'home');
 });
 
+// Test matching a route and checking an object was constructed and an function belonging to the object was fired 
+
+QUnit.test('events.firedWithParamaters', function(assert)
+{
+	page = null;
+	valOne = null;
+	valTwo = null;
+
+	Home = function(){
+		this.index = function(val){
+			page = val;
+		};
+		this.testFunction = function(one, two){
+			valOne = one
+			valTwo = two
+		}
+	};
+	home = new Home();
+
+	Dside.setRoot('http://localhost/dside/');
+	Dside.register({uri:'page/{page}', event:'index', uses:'home'});
+	Dside.currentURI = 'http://localhost/dside/page/home'
+	Dside.run();
+
+	assert.equal(page, 'home');
+
+	Dside.reset()
+	Dside.setRoot('http://localhost/dside/');
+	Dside.register({uri:'page/{valOne}/{valTwo}', event:'testFunction', uses:'home'});
+	Dside.currentURI = 'http://localhost/dside/page/1/2'
+	Dside.run();
+
+	assert.equal(valOne, 1);
+	assert.equal(valTwo, 2);
+});
+
 // Test before and after global filters
 
 QUnit.test("events.globalFilter", function(assert)
