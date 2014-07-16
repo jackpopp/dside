@@ -54,7 +54,7 @@ class DsideDipatcher
 	matchDynamicRoute: (uri, current) ->
 		# match string should look like this
 		# 'test\/[a-zA-Z%_\\-0-9\(\\)]+'
-		uri = uri.replace(/{.*?}/, '[a-zA-Z%_\\-0-9\\(\\)]+')
+		uri = uri.replace(/{.*?}/g, '[a-zA-Z%_\\-0-9\\(\\)]+')
 		reg = new RegExp('('+uri+')$', 'i')
 		if current.match(reg)
 			return true

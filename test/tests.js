@@ -44,6 +44,10 @@ QUnit.test('routing.matchDynamic', function(assert){
 	assert.equal(Dside.matchRoute('test/4'), route, 'Should match and return route object');
 	assert.equal(Dside.matchRoute('test/6'), route, 'Should match and return route object');
 	assert.equal(Dside.matchRoute('test/5/5'), false, 'Should not match and return false');
+
+	route = {uri:'user/{id}/{other_id}', event:'indexPage', uses: 'home'}
+	Dside.register(route);
+	assert.equal(Dside.matchRoute('user/6/6'), route, 'Should match and return route object');
 })
 
 // Test before and after global filters
