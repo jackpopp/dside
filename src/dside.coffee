@@ -48,6 +48,7 @@ class DsideDipatcher
 				return route
 			# check if dynamic match, if there are then lets grab the vars from the uri
 			else if @matchDynamicRoute(route.uri, currentRoute)
+				route['paramaters'] = @resolveParamatersFromRoute(route, currentRoute)
 				return route
 		return false
 
@@ -59,6 +60,29 @@ class DsideDipatcher
 		if current.match(reg)
 			return true
 		return false
+
+	resolveParamatersFromRoute: (route, current) ->
+		params = []
+		routeStrings = route.uri.split('/')
+		currentStrings = current.split('/')
+
+		for key, value of routeStrings
+			if value.match(/{.*?}/)
+				params.push @castStringToInt(currentStrings[key])
+		return params
+
+	###
+	# Helper function, will cast a string to integer if the casted value is a number
+	# Otherwise will return as a string
+	#
+	# @return mixed
+	###
+
+	castStringToInt: (val) ->
+		check = parseInt(val)
+		if not isNaN(check)
+			return check
+		return val
 
 	dispatchMultipleEvents: (events) ->
 		for event in events

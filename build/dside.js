@@ -61,6 +61,7 @@ DsideDipatcher = (function() {
       if (route.uri === currentRoute) {
         return route;
       } else if (this.matchDynamicRoute(route.uri, currentRoute)) {
+        route['paramaters'] = this.resolveParamatersFromRoute(route, currentRoute);
         return route;
       }
     }
@@ -75,6 +76,37 @@ DsideDipatcher = (function() {
       return true;
     }
     return false;
+  };
+
+  DsideDipatcher.prototype.resolveParamatersFromRoute = function(route, current) {
+    var currentStrings, key, params, routeStrings, value;
+    params = [];
+    routeStrings = route.uri.split('/');
+    currentStrings = current.split('/');
+    for (key in routeStrings) {
+      value = routeStrings[key];
+      if (value.match(/{.*?}/)) {
+        params.push(this.castStringToInt(currentStrings[key]));
+      }
+    }
+    return params;
+  };
+
+
+  /*
+  	 * Helper function, will cast a string to integer if the casted value is a number
+  	 * Otherwise will return as a string
+  	 *
+  	 * @return mixed
+   */
+
+  DsideDipatcher.prototype.castStringToInt = function(val) {
+    var check;
+    check = parseInt(val);
+    if (!isNaN(check)) {
+      return check;
+    }
+    return val;
   };
 
   DsideDipatcher.prototype.dispatchMultipleEvents = function(events) {

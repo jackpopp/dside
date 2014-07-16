@@ -50,33 +50,16 @@ QUnit.test('routing.matchDynamic', function(assert){
 	assert.equal(Dside.matchRoute('user/6/6'), route, 'Should match and return route object');
 })
 
-// Test before and after global filters
+QUnit.test('routing.matchDynamic', function(assert){
+	route = {uri:'user/{id}/{other_id}', event:'indexPage', uses: 'home'};
+	Dside.register(route);
 
-QUnit.test("filters.global", function(assert)
-{
-	Dside.before('Home@beforeAction');
-	Dside.after('Home@afterAction');
-
-	assert.equal(Dside.beforeEvents.length, 1, 'Before filter array has one filter');
-	assert.equal(Dside.beforeEvents[0], 'Home@beforeAction', 'Filter equal to Home@beforeAction');
-	assert.equal(Dside.afterEvents.length, 1, 'After filter array has one filter');
-	assert.equal(Dside.afterEvents[0], 'Home@afterAction', 'Filter equal to Home@afterAction');
-});
-
-// Test reset function
-
-QUnit.test('reset', function(assert)
-{
-	Dside.reset();
-	assert.equal(Dside.routes.length , 0);
-	assert.equal(Dside.getRoot(), null, 0);
-	assert.equal(Dside.beforeEvents.length , 0);
-	assert.equal(Dside.afterEvents.length , 0);
-});
+	assert.deepEqual(Dside.resolveParamatersFromRoute(route, 'user/6/7'), [6,7], 'Should match and return route object');
+})
 
 // Test matching a route and checking an global event was fire
 
-QUnit.test('eventFired', function(assert)
+QUnit.test('events.fired', function(assert)
 {
 	pie = 'orange';
 	applePie = function(){
@@ -97,7 +80,7 @@ QUnit.test('eventFired', function(assert)
 
 // Test matching a route and checking an object was constructed and an function belonging to the object was fired 
 
-QUnit.test('eventFromObjectFired', function(assert)
+QUnit.test('events.firedFromObject', function(assert)
 {
 	page = null;
 	Home = function(){
@@ -116,4 +99,36 @@ QUnit.test('eventFromObjectFired', function(assert)
 	Dside.run();
 
 	assert.equal(page, 'home');
+});
+
+// Test before and after global filters
+
+QUnit.test("events.globalFilter", function(assert)
+{
+	Dside.before('Home@beforeAction');
+	Dside.after('Home@afterAction');
+
+	assert.equal(Dside.beforeEvents.length, 1, 'Before filter array has one filter');
+	assert.equal(Dside.beforeEvents[0], 'Home@beforeAction', 'Filter equal to Home@beforeAction');
+	assert.equal(Dside.afterEvents.length, 1, 'After filter array has one filter');
+	assert.equal(Dside.afterEvents[0], 'Home@afterAction', 'Filter equal to Home@afterAction');
+});
+
+// Test helper function
+
+QUnit.test('canCastStringToInt', function(assert)
+{
+	assert.equal(Dside.castStringToInt('5'), 5, 'Returns a string');
+	assert.equal(Dside.castStringToInt('Test'), 'Test', 'Returns a string');
+});
+
+// Test reset function
+
+QUnit.test('reset', function(assert)
+{
+	Dside.reset();
+	assert.equal(Dside.routes.length , 0);
+	assert.equal(Dside.getRoot(), null, 0);
+	assert.equal(Dside.beforeEvents.length , 0);
+	assert.equal(Dside.afterEvents.length , 0);
 });
