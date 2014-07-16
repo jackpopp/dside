@@ -1,5 +1,6 @@
 QUnit.testStart(function(){
 	Dside.reset();
+	Dside.setRoot('http://localhost/dside/');
 });
 
 // Test setting root
@@ -13,7 +14,7 @@ QUnit.test("setRoot", function(assert){
 
 // Test registering a route
 
-QUnit.test("registerRoute", function(assert){
+QUnit.test("routing.register", function(assert){
 
 	Dside.register([
 		{uri:'', event:'indexPage', uses: 'home'},
@@ -27,12 +28,22 @@ QUnit.test("registerRoute", function(assert){
 
 // Test matching a route
 
-QUnit.test('matchRoute', function(assert){
+QUnit.test('routing.matchStatic', function(assert){
 	route = {uri:'test', event:'indexPage', uses: 'home'}
 
 	Dside.register(route);
 	assert.equal(Dside.matchRoute('fail'), false, 'Should not match and return false')
 	assert.equal(Dside.matchRoute('test'), route, 'Should match and return route object')
+})
+
+
+QUnit.test('routing.matchDynamic', function(assert){
+	route = {uri:'test/{id}', event:'indexPage', uses: 'home'}
+
+	Dside.register(route);
+	assert.equal(Dside.matchRoute('test/4'), route, 'Should match and return route object');
+	assert.equal(Dside.matchRoute('test/6'), route, 'Should match and return route object');
+	assert.equal(Dside.matchRoute('test/5/5'), false, 'Should not match and return false');
 })
 
 // Test before and after global filters

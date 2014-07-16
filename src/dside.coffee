@@ -43,8 +43,24 @@ class DsideDipatcher
 
 	matchRoute: (currentRoute) ->
 		for route in @routes
+			# check if exact match
 			if route.uri is currentRoute
 				return route
+			# check if dynamic match, if there are then lets grab the vars from the uri
+			else if @matchDynamicRoute(route.uri, currentRoute)
+				return route
+		return false
+
+	matchDynamicRoute: (uri, current) ->
+		# match string should look like this
+		# 'test\/[a-zA-Z%_\\-0-9\(\\)]+'
+
+		uri = uri.replace('/', '\/')
+		uri = uri.replace(/{.*?}/, '[a-zA-Z%_\\-0-9\\(\\)]+')
+		uri = uri.replace(/'/g, '')
+		reg = new RegExp('('+uri+')$', 'i')
+		if current.match(reg)
+			return true
 		return false
 
 	dispatchMultipleEvents: (events) ->

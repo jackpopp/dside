@@ -60,7 +60,21 @@ DsideDipatcher = (function() {
       route = _ref[_i];
       if (route.uri === currentRoute) {
         return route;
+      } else if (this.matchDynamicRoute(route.uri, currentRoute)) {
+        return route;
       }
+    }
+    return false;
+  };
+
+  DsideDipatcher.prototype.matchDynamicRoute = function(uri, current) {
+    var reg;
+    uri = uri.replace('/', '\/');
+    uri = uri.replace(/{.*?}/, '[a-zA-Z%_\\-0-9\\(\\)]+');
+    uri = uri.replace(/'/g, '');
+    reg = new RegExp('(' + uri + ')$', 'i');
+    if (current.match(reg)) {
+      return true;
     }
     return false;
   };
