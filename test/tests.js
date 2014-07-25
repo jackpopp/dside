@@ -68,7 +68,7 @@ QUnit.test('events.fired', function(assert)
 
 	Dside.setRoot('http://localhost/dside/');
 	Dside.register([
-		{uri:'', event:'applePie'},
+		{uri:'', event:'@applePie'},
 	]);
 
 	Dside.currentURI = 'http://localhost/dside/'
@@ -136,6 +136,52 @@ QUnit.test('events.firedWithParamaters', function(assert)
 	assert.equal(valOne, 1);
 	assert.equal(valTwo, 2);
 });
+
+// Test event constructs object and fired function
+
+QUnit.test('event.constructObjectAndFiredEvent', function(assert)
+{
+	page = null;
+	Home = function(){
+		this.index = function(){
+			page = 'home';
+		};
+	};
+
+	Dside.setRoot('http://localhost/dside/');
+	Dside.register([
+		{uri:'', event:'Home@index'},
+	]);
+
+	Dside.currentURI = 'http://localhost/dside/'
+	Dside.run();
+
+	assert.equal(page, 'home', 'Page variable to should equal home');
+});
+
+// Test event constructs object
+
+QUnit.test('event.constructObject', function(assert)
+{
+	page = null;
+	Home = function(){
+		this.index = function(){
+			page = 'home';
+		};
+		this.index()
+	};
+
+	Dside.setRoot('http://localhost/dside/');
+	Dside.register([
+		{uri:'', event:'Home'},
+	]);
+
+	Dside.currentURI = 'http://localhost/dside/'
+	Dside.run();
+
+	assert.equal(page, 'home');
+});
+
 
 // Test before and after global filters
 

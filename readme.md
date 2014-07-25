@@ -55,10 +55,28 @@ Dside.register([
 Dside.run();
 ```
 
+Construct an object
+```javascript
+
+Home = function(){
+	constructor = function(){
+		console.log('construct');
+	};
+
+	construct();
+};
+
+Dside.register([
+	{uri:'', event:'Home'},
+]);
+
+Dside.run();
+```
+
 Dispatch a global function
 ```javascript
 function someFunction(){
-		console.log('someFunction');
+		console.log('@someFunction');
 }
 
 Dside.register([

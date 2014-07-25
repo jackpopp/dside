@@ -117,7 +117,19 @@ DsideDipatcher = (function() {
     }
   };
 
-  DsideDipatcher.prototype.dispatch = function(dispatchEvent, paramaters, uses) {
+
+  /*
+  	 * If callback then run it
+  	 * Else split the string and check it's length
+  	 *
+  	 * If length is over 1 element then we check if only the second element is filled
+  	 * If it is then we're firing a function, if both are filled we're constructing an object
+  	 * and firing a function from that object
+  	 *
+  	 *
+   */
+
+  DsideDipatcher.prototype.dispatch = function(dispatchEvent, paramaters, uses, construct) {
     var dis, obj;
     if (paramaters == null) {
       paramaters = [];
@@ -125,18 +137,25 @@ DsideDipatcher = (function() {
     if (uses == null) {
       uses = null;
     }
+    if (construct == null) {
+      construct = null;
+    }
     if (typeof dispatchEvent === 'function') {
       dispatchEvent();
     } else {
       dis = dispatchEvent.split(delimiter);
       if (dis.length > 1) {
-        obj = new window[dis[0]]();
-        obj[dis[1]].apply(obj, paramaters);
+        if (dis[0] === '') {
+          window[dis[1]].apply(null, paramaters);
+        } else {
+          obj = new window[dis[0]]();
+          obj[dis[1]].apply(obj, paramaters);
+        }
       } else {
         if (uses !== null) {
           window[uses][dis].apply(null, paramaters);
         } else {
-          window[dis].apply(null, paramaters);
+          new window[dis](paramaters);
         }
       }
     }
@@ -161,7 +180,7 @@ DsideDipatcher = (function() {
       if (match.hasOwnProperty('before')) {
         this.dispatchMultipleEvents(match.before);
       }
-      this.dispatch(match.event, match.paramaters, match.uses);
+      this.dispatch(match.event, match.paramaters, match.uses, match.construct);
       this.dispatchMultipleEvents(this.afterEvents);
       if (match.hasOwnProperty('after')) {
         this.dispatchMultipleEvents(match.after);

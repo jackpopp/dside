@@ -89,21 +89,36 @@ class DsideDipatcher
 			@dispatch(event)
 		return
 
-	dispatch: (dispatchEvent, paramaters = [], uses = null) ->
+	###
+	# If callback then run it
+	# Else split the string and check it's length
+	#
+	# If length is over 1 element then we check if only the second element is filled
+	# If it is then we're firing a function, if both are filled we're constructing an object
+	# and firing a function from that object
+	#
+	# 
+	###
+
+	dispatch: (dispatchEvent, paramaters = [], uses = null, construct = null) ->
 		if typeof dispatchEvent is 'function'
 			dispatchEvent()
 		else
 			dis = dispatchEvent.split(delimiter)
 			if dis.length > 1
-				# create object
-				obj = new window[dis[0]]()
-				# run function, apply the context of this in the created obj as itself
-				obj[dis[1]].apply(obj, paramaters)
+				if dis[0] is ''
+					window[dis[1]].apply(null, paramaters)
+				else
+					# create object
+					obj = new window[dis[0]]()
+					# run function, apply the context of this in the created obj as itself
+					obj[dis[1]].apply(obj, paramaters)
 			else
 				if uses isnt null
 					window[uses][dis].apply(null, paramaters)
 				else
-					window[dis].apply(null, paramaters)
+					new window[dis](paramaters)
+					#window[dis].apply(null, paramaters)
 		return
 
 	###
@@ -121,7 +136,7 @@ class DsideDipatcher
 			@dispatchMultipleEvents(@beforeEvents)
 			@dispatchMultipleEvents(match.before) if match.hasOwnProperty('before')
 			# dispatch main event
-			@dispatch(match.event, match.paramaters ,match.uses)
+			@dispatch(match.event, match.paramaters ,match.uses, match.construct)
 			# dispatch after events
 			@dispatchMultipleEvents(@afterEvents)
 			@dispatchMultipleEvents(match.after) if match.hasOwnProperty('after')
