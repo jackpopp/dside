@@ -214,3 +214,20 @@ QUnit.test('reset', function(assert)
 	assert.equal(Dside.beforeEvents.length , 0);
 	assert.equal(Dside.afterEvents.length , 0);
 });
+
+
+QUnit.test('removeQueryStringFromRouteToTest', function(assert)
+{
+	route = 'hello?hello'
+	prepared = Dside.prepareRoute(route)
+
+	assert.equal('hello', prepared, 'Query String removed')
+})
+
+QUnit.test('removeHashFromRouteToTest', function(assert)
+{
+	route = 'hello#hello'
+	prepared = Dside.prepareRoute(route)
+
+	assert.equal('hello', prepared, 'Hash removed')
+})

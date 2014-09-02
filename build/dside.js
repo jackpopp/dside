@@ -1,13 +1,19 @@
 var Dside, DsideDipatcher;
 
 DsideDipatcher = (function() {
-  var delimiter, routeToMatch, variables;
+  var delimiter, hashDelimiter, queryStringDelimiter, routeToMatch, scope, variables;
 
   routeToMatch = null;
 
   delimiter = '@';
 
+  queryStringDelimiter = '?';
+
+  hashDelimiter = '#';
+
   variables = [];
+
+  scope = window;
 
   function DsideDipatcher() {
     this.rootURI = null;
@@ -26,11 +32,23 @@ DsideDipatcher = (function() {
   };
 
   DsideDipatcher.prototype.setRouteToMatch = function(route) {
-    routeToMatch = route;
+    routeToMatch = this.prepareRoute(route);
   };
 
   DsideDipatcher.prototype.getRouteToMatch = function() {
     return routeToMatch;
+  };
+
+  DsideDipatcher.prototype.setScope = function(scope) {
+    scope = scope;
+  };
+
+  DsideDipatcher.prototype.getScope = function() {
+    return scope;
+  };
+
+  DsideDipatcher.prototype.prepareRoute = function(route) {
+    return route.split(queryStringDelimiter)[0].split(hashDelimiter)[0];
   };
 
   DsideDipatcher.prototype.register = function(route) {
@@ -159,6 +177,20 @@ DsideDipatcher = (function() {
         }
       }
     }
+  };
+
+  DsideDipatcher.prototype.constructObject = function(ctor, params) {
+    var fakeCtor, newobj, obj;
+    fakeCtor = function() {};
+    fakeCtor.prototype = ctor.prototype;
+    obj = new fakeCtor();
+    obj.constructor = ctor;
+    console.log(obj);
+    newobj = ctor.apply(obj, params);
+    if (newobj !== null && (typeof newobj === "object" || typeof newobj === "function")) {
+      obj = newobj;
+    }
+    return obj;
   };
 
 

@@ -1,7 +1,10 @@
 class DsideDipatcher
 	routeToMatch = null
 	delimiter = '@'
+	queryStringDelimiter = '?'
+	hashDelimiter = '#'
 	variables = []
+	scope = window
 
 	constructor: ->
 		@rootURI = null
@@ -18,11 +21,21 @@ class DsideDipatcher
 		return @rootURI
 
 	setRouteToMatch: (route) ->
-		routeToMatch = route
+		routeToMatch = @prepareRoute(route)
 		return
 
 	getRouteToMatch: -> 
 		return routeToMatch
+
+	setScope: (scope) ->
+		scope = scope
+		return
+
+	getScope: ->
+		return scope
+
+	prepareRoute: (route) ->
+		return route.split(queryStringDelimiter)[0].split(hashDelimiter)[0]
 
 	register: (route) ->
 		# Detect if it's an array of arrays, if so loop through are push each one
@@ -107,6 +120,7 @@ class DsideDipatcher
 			dis = dispatchEvent.split(delimiter)
 			if dis.length > 1
 				if dis[0] is ''
+					# execute a function
 					window[dis[1]].apply(null, paramaters)
 				else
 					# create object
@@ -117,9 +131,38 @@ class DsideDipatcher
 				if uses isnt null
 					window[uses][dis].apply(null, paramaters)
 				else
+					# create an object
 					new window[dis](paramaters)
+					#@constructObject(dis, paramaters)
 					#window[dis].apply(null, paramaters)
 		return
+
+	constructObject: (ctor, params) ->
+	    # Use a fake constructor function with the target constructor's
+	    # `prototype` property to create the object with the right prototype
+	    fakeCtor = () ->
+	    	return
+
+	    fakeCtor.prototype = ctor.prototype
+
+	    obj = new fakeCtor()
+
+	    # Set the object's `constructor`
+	    obj.constructor = ctor
+
+	    console.log obj
+
+	    # Call the constructor function
+	    newobj = ctor.apply(obj, params)
+
+	    # Use the returned object if there is one.
+	    # Note that we handle the funky edge case of the `Function` constructor,
+	    # thanks to Mike's comment below. Double-checked the spec, that should be
+	    # the lot.
+	    obj = newobj if (newobj isnt null and (typeof newobj is "object" or typeof newobj is "function"))        
+
+    	# Done
+    	return obj
 
 	###
 	# Try and match a route, if you do we get the key to the reoute
