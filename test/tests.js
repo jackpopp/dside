@@ -231,3 +231,24 @@ QUnit.test('removeHashFromRouteToTest', function(assert)
 
 	assert.equal('hello', prepared, 'Hash removed')
 })
+
+QUnit.test('removeTrailingSlashFromUri', function(assert)
+{
+		uri = 'something/something/here/'
+
+		uri = Dside.removeTrailingSlashFromUri(uri)
+
+		assert.equal(uri, 'something/something/here', 'Trailing slash removed')
+
+		uri = '/'
+
+		uri = Dside.removeTrailingSlashFromUri(uri)
+
+		assert.equal(uri, '', 'Trailing slash removed')
+
+		uri = 'something/something/here'
+
+		uri = Dside.removeTrailingSlashFromUri(uri)
+
+		assert.equal(uri, 'something/something/here', 'No trailing slash to remove so uri stays the same')
+})

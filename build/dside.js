@@ -48,7 +48,14 @@ DsideDipatcher = (function() {
   };
 
   DsideDipatcher.prototype.prepareRoute = function(route) {
-    return route.split(queryStringDelimiter)[0].split(hashDelimiter)[0];
+    return this.removeTrailingSlashFromUri(route.split(queryStringDelimiter)[0].split(hashDelimiter)[0]);
+  };
+
+  DsideDipatcher.prototype.removeTrailingSlashFromUri = function(uri) {
+    if (uri.indexOf("/", uri.length - 1) !== -1) {
+      return uri.slice(0, uri.length - 1);
+    }
+    return uri;
   };
 
   DsideDipatcher.prototype.register = function(route) {
@@ -178,6 +185,14 @@ DsideDipatcher = (function() {
       }
     }
   };
+
+
+  /*
+  	 *
+  	 * Creates a new object from a passed constructor
+  	 * This will allow us to construct modules that arent in global scope
+  	 *
+   */
 
   DsideDipatcher.prototype.constructObject = function(ctor, params) {
     var fakeCtor, newobj, obj;

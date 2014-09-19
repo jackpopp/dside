@@ -35,7 +35,13 @@ class DsideDipatcher
 		return scope
 
 	prepareRoute: (route) ->
-		return route.split(queryStringDelimiter)[0].split(hashDelimiter)[0]
+		return @removeTrailingSlashFromUri(route.split(queryStringDelimiter)[0].split(hashDelimiter)[0])
+
+	removeTrailingSlashFromUri: (uri) ->
+		if uri.indexOf("/", uri.length-1) isnt -1
+			return uri.slice(0, uri.length-1)
+			
+		return uri
 
 	register: (route) ->
 		# Detect if it's an array of arrays, if so loop through are push each one
@@ -136,6 +142,13 @@ class DsideDipatcher
 					#@constructObject(dis, paramaters)
 					#window[dis].apply(null, paramaters)
 		return
+
+	###
+	#
+	# Creates a new object from a passed constructor
+	# This will allow us to construct modules that arent in global scope
+	#
+	###
 
 	constructObject: (ctor, params) ->
 	    # Use a fake constructor function with the target constructor's
